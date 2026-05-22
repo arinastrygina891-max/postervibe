@@ -277,7 +277,6 @@
     <div class="sidebar">
         <div class="sidebar-header">Vibecoding Studio v3.7</div>
         
-        <!-- Панель Отмены / Повтора -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 20px 15px 20px; border-bottom: 1px solid rgba(237,235,231,0.2);">
             <button class="btn-action" onclick="undo()">◀ Отменить</button>
             <button class="btn-action" onclick="redo()">Повторить ▶</button>
@@ -963,8 +962,8 @@
             if(!l) { propEditor.innerHTML = ''; return; }
             
             let html = `<div class="section-title">Свойства выбранного слоя</div>
-            <div class="control-group"><label>Расположение X: <span id="val-x">${Math.round(l.x)}px</span></label><input type="range" id="param-x" min="-400" max="1500" value="${Math.round(l.x)}" oninput="updCoords('x',this.value)" onchange="pushHistory()"></div>
-            <div class="control-group"><label>Расположение Y: <span id="val-y">${Math.round(l.y)}px</span></label><input type="range" id="param-y" min="-400" max="1500" value="${Math.round(l.y)}" oninput="updCoords('y',this.value)" onchange="pushHistory()"></div>
+            <div class="control-group"><label>Расположение по горизонтали: <span id="val-x">${Math.round(l.x)}px</span></label><input type="range" id="param-x" min="-400" max="1500" value="${Math.round(l.x)}" oninput="updCoords('x',this.value)" onchange="pushHistory()"></div>
+            <div class="control-group"><label>Расположение по вертикали: <span id="val-y">${Math.round(l.y)}px</span></label><input type="range" id="param-y" min="-400" max="1500" value="${Math.round(l.y)}" oninput="updCoords('y',this.value)" onchange="pushHistory()"></div>
             <div class="control-group"><label>Размер: <span id="val-size">${l.size}</span></label><input type="range" value="${l.size}" min="20" max="1500" oninput="upd('size',this.value)" onchange="pushHistory()"></div>
             <div class="control-group"><label>Цвет объекта</label><input type="color" value="${l.color}" oninput="upd('color',this.value)" onchange="pushHistory()"></div>`;
             
@@ -989,14 +988,14 @@
                     <option value="style7" ${l.patternStyle==='style7'?'selected':''}>7. Спираль Архимеда</option>
                     <option value="style8" ${l.patternStyle==='style8'?'selected':''}>8. Фрактальные розетки</option>
                     <option value="style9" ${l.patternStyle==='style9'?'selected':''}>9. Гармоника Лиссажу</option>
-                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>10. Соты Дракона</option>
-                    <option value="style11" ${l.patternStyle==='style11'?'selected':''}>11. Сакральная Мандала</option>
-                    <option value="style12" ${l.patternStyle==='style12'?'selected':''}>12. Полутоновый Филлотаксис</option>
-                    <option value="style13" ${l.patternStyle==='style13'?'selected':''}>13. Муаровый Кибер-Гиперболоид</option>
-                    <option value="style14" ${l.patternStyle==='style14'?'selected':''}>14. Банкнотный Гильош</option>
-                    <option value="style15" ${l.patternStyle==='style15'?'selected':''}>15. Фрактальная Сверхновая</option>
-                    <option value="style16" ${l.patternStyle==='style16'?'selected':''}>16. Спирографическая Гипотрохоида</option>
-                    <option value="style17" ${l.patternStyle==='style17'?'selected':''}>17. Резонансная Геометрическая Сетка</option>
+                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>10. Соты Дракона (для вайбкода-07.jpg)</option>
+                    <option value="style11" ${l.patternStyle==='style11'?'selected':''}>11. Сакральная Мандала (для вайбкода-08.jpg)</option>
+                    <option value="style12" ${l.patternStyle==='style12'?'selected':''}>12. Полутоновый Филлотаксис (для вайбкода-09.jpg)</option>
+                    <option value="style13" ${l.patternStyle==='style13'?'selected':''}>13. Муаровый Кибер-Гиперболоид (для вайбкода-10/11/12.jpg)</option>
+                    <option value="style14" ${l.patternStyle==='style14'?'selected':''}>14. Банкнотного Гильош (для вайбкода-13.jpg)</option>
+                    <option value="style15" ${l.patternStyle==='style15'?'selected':''}>15. Фрактальная Сверхновая (для вайбкода-14.jpg)</option>
+                    <option value="style16" ${l.patternStyle==='style16'?'selected':''}>16. Спирографическая Гипотрохоида (для вайбкода-15.jpg)</option>
+                    <option value="style17" ${l.patternStyle==='style17'?'selected':''}>17. Резонансная Геометрическая Сетка (для вайбкода-16.jpg)</option>
                 </select></div>
                 <div class="control-group"><label>Толщина нитей: <span id="val-strokeWidth">${l.strokeWidth || 1.5}</span></label><input type="range" value="${l.strokeWidth || 1.5}" min="0.5" max="10" step="0.1" oninput="upd('strokeWidth',this.value)" onchange="pushHistory()"></div>
                 <div class="control-group"><label>Сложность узора: <span id="val-complexity">${l.complexity}</span></label><input type="range" value="${l.complexity}" min="4" max="32" oninput="upd('complexity',this.value)" onchange="pushHistory()"></div>
