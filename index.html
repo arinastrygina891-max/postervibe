@@ -1075,47 +1075,4 @@
         render();
     </script>
 </body>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Vibecoding Studio</title>
-    <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #f0f0f0; padding: 20px; }
-        #canvas { background: white; border: 1px solid #ccc; cursor: crosshair; touch-action: none; }
-        .controls { margin-top: 20px; display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
-        button { padding: 10px 20px; cursor: pointer; }
-        .slider-group { display: flex; flex-direction: column; }
-    </style>
-</head>
-<body>
-
-    <canvas id="canvas" width="800" height="600"></canvas>
-
-    <div class="controls">
-        <div class="slider-group">
-            <label>Расположение по горизонтали</label>
-            <input type="range" id="posX" min="0" max="800" value="400">
-        </div>
-        <div class="slider-group">
-            <label>Расположение по вертикали</label>
-            <input type="range" id="posY" min="0" max="600" value="300">
-        </div>
-        <button id="undo">Отменить</button>
-        <button id="apply">Применить</button>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const images = [
-            'для вайбкода-07.jpg', 'для вайбкода-08.jpg', 'для вайбкода-09.jpg', 
-            'для вайбкода-10.jpg', 'для вайбкода-11.jpg', 'для вайбкода-12.jpg', 
-            'для вайбкода-13.jpg', 'для вайбкода-14.jpg', 'для вайбкода-15.jpg', 'для вайбкода-16.jpg'
-        ];
-        
-        // Логика приложения остается прежней, с учетом обновленных надписей в UI
-        console.log("Интерфейс обновлен для VibeCoding Studio");
-    </script>
-</body>
 </html>
