@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibecoding Studio v3.7</title>
+    <title>Связаная физика</title>
     <style>
         :root {
             --bg-site: #434451;
@@ -275,12 +275,12 @@
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-header">Vibecoding Studio v3.7</div>
+        <div class="sidebar-header">Связаная физика</div>
         
         <!-- Панель Отмены / Повтора -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 20px 15px 20px; border-bottom: 1px solid rgba(237,235,231,0.2);">
             <button class="btn-action" onclick="undo()">◀ Отменить</button>
-            <button class="btn-action" onclick="redo()">Повторить ▶</button>
+            <button class="btn-action" onclick="redo()">Применить ▶</button>
         </div>
         
         <div class="controls-wrapper">
@@ -963,8 +963,8 @@
             if(!l) { propEditor.innerHTML = ''; return; }
             
             let html = `<div class="section-title">Свойства выбранного слоя</div>
-            <div class="control-group"><label>Расположение X: <span id="val-x">${Math.round(l.x)}px</span></label><input type="range" id="param-x" min="-400" max="1500" value="${Math.round(l.x)}" oninput="updCoords('x',this.value)" onchange="pushHistory()"></div>
-            <div class="control-group"><label>Расположение Y: <span id="val-y">${Math.round(l.y)}px</span></label><input type="range" id="param-y" min="-400" max="1500" value="${Math.round(l.y)}" oninput="updCoords('y',this.value)" onchange="pushHistory()"></div>
+            <div class="control-group"><label>Расположение по горизонтали: <span id="val-x">${Math.round(l.x)}px</span></label><input type="range" id="param-x" min="-400" max="1500" value="${Math.round(l.x)}" oninput="updCoords('x',this.value)" onchange="pushHistory()"></div>
+            <div class="control-group"><label>Расположение по вертикали: <span id="val-y">${Math.round(l.y)}px</span></label><input type="range" id="param-y" min="-400" max="1500" value="${Math.round(l.y)}" oninput="updCoords('y',this.value)" onchange="pushHistory()"></div>
             <div class="control-group"><label>Размер: <span id="val-size">${l.size}</span></label><input type="range" value="${l.size}" min="20" max="1500" oninput="upd('size',this.value)" onchange="pushHistory()"></div>
             <div class="control-group"><label>Цвет объекта</label><input type="color" value="${l.color}" oninput="upd('color',this.value)" onchange="pushHistory()"></div>`;
             
@@ -979,25 +979,17 @@
                     <div class="control-group"><label>Толщина нити: <span id="val-stitchWeight">${l.stitchWeight}</span></label><input type="range" value="${l.stitchWeight}" min="0.5" max="8" step="0.5" oninput="upd('stitchWeight',this.value)" onchange="pushHistory()"></div>`;
                 }
             } else if(l.type === 'lace') {
-                html += `<div class="control-group"><label>Вариация кружева (1-17)</label><select onchange="upd('patternStyle',this.value); pushHistory();">
-                    <option value="style1" ${l.patternStyle==='style1'?'selected':''}>1. Гиперболическое гофре</option>
-                    <option value="style2" ${l.patternStyle==='style2'?'selected':''}>2. Радиально-зубчатая звезда</option>
-                    <option value="style3" ${l.patternStyle==='style3'?'selected':''}>3. Цветок жизни</option>
-                    <option value="style4" ${l.patternStyle==='style4'?'selected':''}>4. Роторный гироскоп</option>
-                    <option value="style5" ${l.patternStyle==='style5'?'selected':''}>5. Пунктирный кокон</option>
-                    <option value="style6" ${l.patternStyle==='style6'?'selected':''}>6. Паутина с узлами</option>
-                    <option value="style7" ${l.patternStyle==='style7'?'selected':''}>7. Спираль Архимеда</option>
-                    <option value="style8" ${l.patternStyle==='style8'?'selected':''}>8. Фрактальные розетки</option>
-                    <option value="style9" ${l.patternStyle==='style9'?'selected':''}>9. Гармоника Лиссажу</option>
-                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>10. Соты Дракона</option>
-                    <option value="style11" ${l.patternStyle==='style11'?'selected':''}>11. Сакральная Мандала</option>
-                    <option value="style12" ${l.patternStyle==='style12'?'selected':''}>12. Полутоновый Филлотаксис</option>
-                    <option value="style13" ${l.patternStyle==='style13'?'selected':''}>13. Муаровый Кибер-Гиперболоид</option>
-                    <option value="style14" ${l.patternStyle==='style14'?'selected':''}>14. Банкнотный Гильош</option>
-                    <option value="style15" ${l.patternStyle==='style15'?'selected':''}>15. Фрактальная Сверхновая</option>
-                    <option value="style16" ${l.patternStyle==='style16'?'selected':''}>16. Спирографическая Гипотрохоида</option>
-                    <option value="style17" ${l.patternStyle==='style17'?'selected':''}>17. Резонансная Геометрическая Сетка</option>
-                </select></div>
+                html += `<div class="control-group"><label>Вариация кружева (1-17)</label><select onchange="upd('patternStyle',this.value); pushHistory();">                    <option value="style01" ${l.patternStyle==='style01'?'selected':''}>Вариант кружева 1</option>
+                    <option value="style02" ${l.patternStyle==='style02'?'selected':''}>Вариант кружева 2</option>
+                    <option value="style03" ${l.patternStyle==='style03'?'selected':''}>Вариант кружева 3</option>
+                    <option value="style04" ${l.patternStyle==='style04'?'selected':''}>Вариант кружева 4</option>
+                    <option value="style05" ${l.patternStyle==='style05'?'selected':''}>Вариант кружева 5</option>
+                    <option value="style06" ${l.patternStyle==='style06'?'selected':''}>Вариант кружева 6</option>
+                    <option value="style07" ${l.patternStyle==='style07'?'selected':''}>Вариант кружева 7</option>
+                    <option value="style08" ${l.patternStyle==='style08'?'selected':''}>Вариант кружева 8</option>
+                    <option value="style09" ${l.patternStyle==='style09'?'selected':''}>Вариант кружева 9</option>
+                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>Вариант кружева 10</option>
+</select></div>
                 <div class="control-group"><label>Толщина нитей: <span id="val-strokeWidth">${l.strokeWidth || 1.5}</span></label><input type="range" value="${l.strokeWidth || 1.5}" min="0.5" max="10" step="0.1" oninput="upd('strokeWidth',this.value)" onchange="pushHistory()"></div>
                 <div class="control-group"><label>Сложность узора: <span id="val-complexity">${l.complexity}</span></label><input type="range" value="${l.complexity}" min="4" max="32" oninput="upd('complexity',this.value)" onchange="pushHistory()"></div>
                 <div class="control-group"><label>Прозрачность: <span id="val-opacity">${l.opacity}</span></label><input type="range" value="${l.opacity}" min="0.1" max="1" step="0.1" oninput="upd('opacity',this.value)" onchange="pushHistory()"></div>`;
@@ -1075,5 +1067,23 @@
         syncUI(); 
         render();
     </script>
+
+<script>
+window.getLaceImageUrl = function(patternStyle) {
+    const map = {
+        'style01': 'для вайбкода-07.jpg',
+        'style02': 'для вайбкода-08.jpg',
+        'style03': 'для вайбкода-09.jpg',
+        'style04': 'для вайбкода-10.jpg',
+        'style05': 'для вайбкода-11.jpg',
+        'style06': 'для вайбкода-12.jpg',
+        'style07': 'для вайбкода-13.jpg',
+        'style08': 'для вайбкода-14.jpg',
+        'style09': 'для вайбкода-15.jpg',
+        'style10': 'для вайбкода-16.jpg'
+    };
+    return map[patternStyle] || 'для вайбкода-07.jpg';
+};
+</script>
 </body>
 </html>
