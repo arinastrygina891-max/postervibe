@@ -474,7 +474,7 @@
             if(type === 'text') {
                 newLayer = {...newLayer, text: 'Текст', effect: 'stroke', strokeWidth: 1.5, stitchSize: 8, stitchGap: 4, stitchWeight: 1.5};
             } else if(type === 'lace') {
-                newLayer = {...newLayer, size: 450, complexity: 12, patternStyle: 'style01', strokeWidth: 2.0};
+                newLayer = {...newLayer, size: 450, complexity: 12, patternStyle: 'style1', strokeWidth: 2.0};
             } else if(type === 'portal') {
                 newLayer = { ...newLayer, size: 400, opacity: 0.7, stitchSize: 8, stitchGap: 4, stitchWeight: 1.5, pointsCount: 7, seed: Math.random() };
                 newLayer.points = generateRandomPoints(newLayer.pointsCount, newLayer.size);
@@ -533,14 +533,13 @@
             return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">${paths}</svg>`;
         }
 
-        // ИСПРАВЛЕННАЯ ФУНКЦИЯ
         function generateLaceSVG(layer) {
-            const size = layer.size;
-            const imageUrl = window.getLaceImageUrl(layer.patternStyle);
-            return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">
+    const size = layer.size;
+    const imageUrl = window.getLaceImageUrl(layer.patternStyle);
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">
                 <image href="${imageUrl}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid slice" />
             </svg>`;
-        }
+}
 
         function getTextStitchSVGData(layer) {
             const fontSize = layer.size;
@@ -719,7 +718,6 @@
                         svgContent += `<path d="${data.pathData}" stroke="${layer.color}" stroke-width="${layer.stitchWeight}" stroke-linecap="round" fill="none"/>`;
                     }
                 } else if (layer.type === 'lace') {
-                    // Используем исправленную генерацию и для экспорта
                     let laceSVG = generateLaceSVG(layer);
                     svgContent += laceSVG.replace(/<svg[^>]*>/, '').replace('</svg>', '');
                 } else if (layer.type === 'portal') {
@@ -800,18 +798,27 @@
                     <div class="control-group"><label>Толщина нити: <span id="val-stitchWeight">${l.stitchWeight}</span></label><input type="range" value="${l.stitchWeight}" min="0.5" max="8" step="0.5" oninput="upd('stitchWeight',this.value)" onchange="pushHistory()"></div>`;
                 }
             } else if(l.type === 'lace') {
-                html += `<div class="control-group"><label>Вариация кружева (1-10)</label><select onchange="upd('patternStyle',this.value); pushHistory();">
-                    <option value="style01" ${l.patternStyle==='style01'?'selected':''}>Вариант кружева 01</option>
-                    <option value="style02" ${l.patternStyle==='style02'?'selected':''}>Вариант кружева 02</option>
-                    <option value="style03" ${l.patternStyle==='style03'?'selected':''}>Вариант кружева 03</option>
-                    <option value="style04" ${l.patternStyle==='style04'?'selected':''}>Вариант кружева 04</option>
-                    <option value="style05" ${l.patternStyle==='style05'?'selected':''}>Вариант кружева 05</option>
-                    <option value="style06" ${l.patternStyle==='style06'?'selected':''}>Вариант кружева 06</option>
-                    <option value="style07" ${l.patternStyle==='style07'?'selected':''}>Вариант кружева 07</option>
-                    <option value="style08" ${l.patternStyle==='style08'?'selected':''}>Вариант кружева 08</option>
-                    <option value="style09" ${l.patternStyle==='style09'?'selected':''}>Вариант кружева 09</option>
-                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>Вариант кружева 10</option>
+                html += `<div class="control-group"><label>Вариация кружева (1-17)</label><select onchange="upd('patternStyle',this.value); pushHistory();">
+                    <option value="style1" ${l.patternStyle==='style1'?'selected':''}>1. Гиперболическое гофре</option>
+                    <option value="style2" ${l.patternStyle==='style2'?'selected':''}>2. Радиально-зубчатая звезда</option>
+                    <option value="style3" ${l.patternStyle==='style3'?'selected':''}>3. Цветок жизни</option>
+                    <option value="style4" ${l.patternStyle==='style4'?'selected':''}>4. Роторный гироскоп</option>
+                    <option value="style5" ${l.patternStyle==='style5'?'selected':''}>5. Пунктирный кокон</option>
+                    <option value="style6" ${l.patternStyle==='style6'?'selected':''}>6. Паутина с узлами</option>
+                    <option value="style7" ${l.patternStyle==='style7'?'selected':''}>7. Спираль Архимеда</option>
+                    <option value="style8" ${l.patternStyle==='style8'?'selected':''}>8. Фрактальные розетки</option>
+                    <option value="style9" ${l.patternStyle==='style9'?'selected':''}>9. Гармоника Лиссажу</option>
+                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>10. Соты Дракона</option>
+                    <option value="style11" ${l.patternStyle==='style11'?'selected':''}>11. Сакральная Мандала</option>
+                    <option value="style12" ${l.patternStyle==='style12'?'selected':''}>12. Полутоновый Филлотаксис</option>
+                    <option value="style13" ${l.patternStyle==='style13'?'selected':''}>13. Муаровый Кибер-Гиперболоид</option>
+                    <option value="style14" ${l.patternStyle==='style14'?'selected':''}>14. Банкнотный Гильош</option>
+                    <option value="style15" ${l.patternStyle==='style15'?'selected':''}>15. Фрактальная Сверхновая</option>
+                    <option value="style16" ${l.patternStyle==='style16'?'selected':''}>16. Спирографическая Гипотрохоида</option>
+                    <option value="style17" ${l.patternStyle==='style17'?'selected':''}>17. Резонансная Геометрическая Сетка</option>
                 </select></div>
+                <div class="control-group"><label>Толщина нитей: <span id="val-strokeWidth">${l.strokeWidth || 1.5}</span></label><input type="range" value="${l.strokeWidth || 1.5}" min="0.5" max="10" step="0.1" oninput="upd('strokeWidth',this.value)" onchange="pushHistory()"></div>
+                <div class="control-group"><label>Сложность узора: <span id="val-complexity">${l.complexity}</span></label><input type="range" value="${l.complexity}" min="4" max="32" oninput="upd('complexity',this.value)" onchange="pushHistory()"></div>
                 <div class="control-group"><label>Прозрачность: <span id="val-opacity">${l.opacity}</span></label><input type="range" value="${l.opacity}" min="0.1" max="1" step="0.1" oninput="upd('opacity',this.value)" onchange="pushHistory()"></div>`;
             } else if(l.type === 'portal') {
                 html += `<div class="control-group"><label>Случайные вершины: <span id="val-pointsCount">${l.pointsCount}</span></label><input type="range" value="${l.pointsCount}" min="4" max="20" oninput="updPortalPoints(this.value)" onchange="pushHistory()"></div>
@@ -887,23 +894,5 @@
         syncUI(); 
         render();
     </script>
-
-<script>
-window.getLaceImageUrl = function(patternStyle) {
-    const map = {
-        'style01': 'для вайбкода-07.jpg',
-        'style02': 'для вайбкода-08.jpg',
-        'style03': 'для вайбкода-09.jpg',
-        'style04': 'для вайбкода-10.jpg',
-        'style05': 'для вайбкода-11.jpg',
-        'style06': 'для вайбкода-12.jpg',
-        'style07': 'для вайбкода-13.jpg',
-        'style08': 'для вайбкода-14.jpg',
-        'style09': 'для вайбкода-15.jpg',
-        'style10': 'для вайбкода-16.jpg'
-    };
-    return map[patternStyle] || 'для вайбкода-07.jpg';
-};
-</script>
 </body>
 </html>
