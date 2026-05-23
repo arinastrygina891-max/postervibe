@@ -534,12 +534,193 @@
         }
 
         function generateLaceSVG(layer) {
-    const size = layer.size;
-    const imageUrl = window.getLaceImageUrl(layer.patternStyle);
-    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">
-                <image href="${imageUrl}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid slice" />
-            </svg>`;
-}
+            const size = layer.size;
+            const center = size / 2;
+            const comp = layer.complexity;
+            const sw = layer.strokeWidth || 1.5;
+            let paths = '';
+            
+            switch (layer.patternStyle) {
+                case 'style1':
+                    for (let r = 20; r <= center * 0.95; r += (center / 7)) {
+                        let pts = [];
+                        let steps = Math.floor(comp * (r / 15));
+                        for (let i = 0; i <= steps; i++) {
+                            let a = (i / steps) * Math.PI * 2;
+                            let w = Math.sin(a * comp) * (r * 0.09);
+                            pts.push(`${center + Math.cos(a)*(r+w)},${center + Math.sin(a)*(r+w)}`);
+                        }
+                        paths += `<polygon points="${pts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.8"/>`;
+                    }
+                    break;
+                case 'style2':
+                    for (let r = 30; r <= center * 0.9; r += (center / 5)) {
+                        let pts = [];
+                        for (let i = 0; i < comp * 2; i++) {
+                            let a = (i / (comp * 2)) * Math.PI * 2;
+                            let currR = i % 2 === 0 ? r : r * (1 - 1.8 / comp);
+                            pts.push(`${center + Math.cos(a)*currR},${center + Math.sin(a)*currR}`);
+                        }
+                        paths += `<polygon points="${pts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.9"/>`;
+                    }
+                    break;
+                case 'style3':
+                    for (let i = 0; i < comp; i++) {
+                        let a = (i / comp) * Math.PI * 2;
+                        let cx = center + Math.cos(a) * (center * 0.4);
+                        let cy = center + Math.sin(a) * (center * 0.4);
+                        paths += `<circle cx="${cx}" cy="${cy}" r="${center * 0.45}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.6"/>`;
+                    }
+                    break;
+                case 'style4':
+                    for(let i=0; i<comp*2; i++) {
+                        let a = (i / (comp*2)) * Math.PI * 2;
+                        let x1 = center + Math.cos(a)*(center * 0.15);
+                        let y1 = center + Math.sin(a)*(center * 0.15);
+                        let x2 = center + Math.cos(a + 1.2)*(center * 0.95);
+                        let y2 = center + Math.sin(a + 1.2)*(center * 0.95);
+                        paths += `<path d="M ${x1} ${y1} Q ${center + Math.cos(a+0.6)*center} ${center + Math.sin(a+0.6)*center} ${x2} ${y2}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.5"/>`;
+                    }
+                    break;
+                case 'style5':
+                    for (let r = 15; r < center; r += 12) {
+                        paths += `<circle cx="${center}" cy="${center}" r="${r}" fill="none" stroke="${layer.color}" stroke-width="${sw}" stroke-dasharray="${r/4} ${r/6}" opacity="0.7"/>`;
+                    }
+                    break;
+                case 'style6':
+                    for (let r = 40; r <= center * 0.9; r += 35) {
+                        let pts = [];
+                        for(let i=0; i<=comp; i++) {
+                            let a = (i/comp)*Math.PI*2;
+                            pts.push(`${center + Math.cos(a)*r},${center + Math.sin(a)*r}`);
+                            if(i < comp) paths += `<circle cx="${center + Math.cos(a)*r}" cy="${center + Math.sin(a)*r}" r="3" fill="none" stroke="${layer.color}" stroke-width="${sw}"/>`;
+                        }
+                        paths += `<polygon points="${pts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw * 0.8}" opacity="0.6"/>`;
+                    }
+                    break;
+                case 'style7':
+                    let spiralPts = [];
+                    for (let theta = 0; theta < Math.PI * 2 * 6; theta += 0.1) {
+                        let r = (center * 0.9) * (theta / (Math.PI * 2 * 6));
+                        spiralPts.push(`${center + Math.cos(theta)*r},${center + Math.sin(theta)*r}`);
+                    }
+                    paths += `<polyline points="${spiralPts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.75"/>`;
+                    break;
+                case 'style8':
+                    for (let i = 0; i < comp; i++) {
+                        let a = (i / comp) * Math.PI * 2;
+                        let rOuter = center * 0.6;
+                        let x = center + Math.cos(a) * rOuter;
+                        let y = center + Math.sin(a) * rOuter;
+                        paths += `<circle cx="${x}" cy="${y}" r="${center * 0.3}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.5"/>`;
+                        paths += `<circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${layer.color}" stroke-width="${sw * 0.6}" opacity="0.7"/>`;
+                    }
+                    break;
+                case 'style9':
+                    let lissajuPts = [];
+                    for (let t = 0; t <= Math.PI * 2; t += 0.02) {
+                        let x = center + Math.sin(comp * t) * (center * 0.9);
+                        let y = center + Math.cos((comp-1) * t) * (center * 0.9);
+                        lissajuPts.push(`${x},${y}`);
+                    }
+                    paths += `<polyline points="${lissajuPts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.7"/>`;
+                    break;
+                case 'style10':
+                    for(let r = 50; r <= center; r += 50) {
+                        let sides = 6;
+                        let pts = [];
+                        for(let i=0; i<=sides; i++) {
+                            let a = (i/sides)*Math.PI*2 + (r/100);
+                            pts.push(`${center + Math.cos(a)*r},${center + Math.sin(a)*r}`);
+                        }
+                        paths += `<polygon points="${pts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" stroke-dasharray="8 4" opacity="0.6"/>`;
+                    }
+                    break;
+                case 'style11':
+                    for(let r = 30; r <= center * 0.95; r += 35) {
+                        let numCircles = Math.floor(comp * (r/25));
+                        for(let i=0; i<numCircles; i++) {
+                            let a = (i/numCircles)*Math.PI*2;
+                            let cx = center + Math.cos(a)*r;
+                            let cy = center + Math.sin(a)*r;
+                            paths += `<circle cx="${cx}" cy="${cy}" r="${r*0.35}" fill="none" stroke="${layer.color}" stroke-width="${sw*0.6}" opacity="0.35"/>`;
+                        }
+                    }
+                    break;
+                case 'style12':
+                    let goldenAngle = 2.39996;
+                    for(let i=1; i<comp * 14; i++) {
+                        let r = Math.sqrt(i) * (center * 0.95 / Math.sqrt(comp * 14));
+                        let theta = i * goldenAngle;
+                        let cx = center + Math.cos(theta)*r;
+                        let cy = center + Math.sin(theta)*r;
+                        paths += `<circle cx="${cx}" cy="${cy}" r="${sw * 1.1}" fill="${layer.color}" opacity="0.85"/>`;
+                    }
+                    break;
+                case 'style13':
+                    for(let i=0; i<comp * 3.5; i++) {
+                        let a = (i / (comp*3.5)) * Math.PI * 2;
+                        let x1 = center + Math.cos(a)*center;
+                        let y1 = center + Math.sin(a)*center;
+                        let x2 = center + Math.cos(a + Math.PI - 0.4)*center;
+                        let y2 = center + Math.sin(a + Math.PI - 0.4)*center;
+                        paths += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${x2}" stroke="${layer.color}" stroke-width="${sw*0.5}" opacity="0.45"/>`;
+                    }
+                    break;
+                case 'style14':
+                    let st = 400;
+                    for(let wave = 0; wave < 5; wave++) {
+                        let pts = [];
+                        let amp = 12 + wave * 9;
+                        let freq = comp;
+                        for(let i=0; i<=st; i++) {
+                            let theta = (i/st)*Math.PI*2;
+                            let currR = (center*0.55) + Math.sin(theta * freq) * amp + (wave * 22) - 30;
+                            pts.push(`${center + Math.cos(theta)*currR},${center + Math.sin(theta)*currR}`);
+                        }
+                        paths += `<polygon points="${pts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.65"/>`;
+                    }
+                    break;
+                case 'style15':
+                    for(let r = 25; r <= center * 0.95; r += 30) {
+                        let pts = [];
+                        let rot = (r / center) * Math.PI * 0.8;
+                        for(let i=0; i<comp; i++) {
+                            let theta = (i / comp) * Math.PI * 2 + rot;
+                            pts.push(`${center + Math.cos(theta)*r},${center + Math.sin(theta)*r}`);
+                        }
+                        paths += `<polygon points="${pts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw * 0.9}" opacity="0.75"/>`;
+                    }
+                    break;
+                case 'style16':
+                    let hypPts = [];
+                    let tSteps = 600;
+                    let R_sp = center * 0.65;
+                    let r_sp = (comp / 32) * center * 0.45;
+                    let d_sp = center * 0.35;
+                    for(let i=0; i<=tSteps; i++) {
+                        let t = (i / tSteps) * Math.PI * 2 * 10;
+                        let x = (R_sp - r_sp)*Math.cos(t) + d_sp*Math.cos((R_sp - r_sp)*t/r_sp) + center;
+                        let y = (R_sp - r_sp)*Math.sin(t) - d_sp*Math.sin((R_sp - r_sp)*t/r_sp) + center;
+                        hypPts.push(`${x},${y}`);
+                    }
+                    paths += `<polyline points="${hypPts.join(' ')}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.8"/>`;
+                    break;
+                case 'style17':
+                    for(let i = -5; i <= 5; i++) {
+                        for(let j = -5; j <= 5; j++) {
+                            if((i+j)%2 === 0) {
+                                let cx = center + i * (center * 0.16);
+                                let cy = center + j * (center * 0.16);
+                                paths += `<circle cx="${cx}" cy="${cy}" r="${center*0.07}" fill="none" stroke="${layer.color}" stroke-width="${sw}" opacity="0.5"/>`;
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">${paths}</svg>`;
+        }
 
         function getTextStitchSVGData(layer) {
             const fontSize = layer.size;
@@ -798,25 +979,17 @@
                     <div class="control-group"><label>Толщина нити: <span id="val-stitchWeight">${l.stitchWeight}</span></label><input type="range" value="${l.stitchWeight}" min="0.5" max="8" step="0.5" oninput="upd('stitchWeight',this.value)" onchange="pushHistory()"></div>`;
                 }
             } else if(l.type === 'lace') {
-                html += `<div class="control-group"><label>Вариация кружева (1-17)</label><select onchange="upd('patternStyle',this.value); pushHistory();">
-                    <option value="style1" ${l.patternStyle==='style1'?'selected':''}>1. Гиперболическое гофре</option>
-                    <option value="style2" ${l.patternStyle==='style2'?'selected':''}>2. Радиально-зубчатая звезда</option>
-                    <option value="style3" ${l.patternStyle==='style3'?'selected':''}>3. Цветок жизни</option>
-                    <option value="style4" ${l.patternStyle==='style4'?'selected':''}>4. Роторный гироскоп</option>
-                    <option value="style5" ${l.patternStyle==='style5'?'selected':''}>5. Пунктирный кокон</option>
-                    <option value="style6" ${l.patternStyle==='style6'?'selected':''}>6. Паутина с узлами</option>
-                    <option value="style7" ${l.patternStyle==='style7'?'selected':''}>7. Спираль Архимеда</option>
-                    <option value="style8" ${l.patternStyle==='style8'?'selected':''}>8. Фрактальные розетки</option>
-                    <option value="style9" ${l.patternStyle==='style9'?'selected':''}>9. Гармоника Лиссажу</option>
-                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>10. Соты Дракона</option>
-                    <option value="style11" ${l.patternStyle==='style11'?'selected':''}>11. Сакральная Мандала</option>
-                    <option value="style12" ${l.patternStyle==='style12'?'selected':''}>12. Полутоновый Филлотаксис</option>
-                    <option value="style13" ${l.patternStyle==='style13'?'selected':''}>13. Муаровый Кибер-Гиперболоид</option>
-                    <option value="style14" ${l.patternStyle==='style14'?'selected':''}>14. Банкнотный Гильош</option>
-                    <option value="style15" ${l.patternStyle==='style15'?'selected':''}>15. Фрактальная Сверхновая</option>
-                    <option value="style16" ${l.patternStyle==='style16'?'selected':''}>16. Спирографическая Гипотрохоида</option>
-                    <option value="style17" ${l.patternStyle==='style17'?'selected':''}>17. Резонансная Геометрическая Сетка</option>
-                </select></div>
+                html += `<div class="control-group"><label>Вариация кружева (1-17)</label><select onchange="upd('patternStyle',this.value); pushHistory();">                    <option value="style01" ${l.patternStyle==='style01'?'selected':''}>Вариант кружева 1</option>
+                    <option value="style02" ${l.patternStyle==='style02'?'selected':''}>Вариант кружева 2</option>
+                    <option value="style03" ${l.patternStyle==='style03'?'selected':''}>Вариант кружева 3</option>
+                    <option value="style04" ${l.patternStyle==='style04'?'selected':''}>Вариант кружева 4</option>
+                    <option value="style05" ${l.patternStyle==='style05'?'selected':''}>Вариант кружева 5</option>
+                    <option value="style06" ${l.patternStyle==='style06'?'selected':''}>Вариант кружева 6</option>
+                    <option value="style07" ${l.patternStyle==='style07'?'selected':''}>Вариант кружева 7</option>
+                    <option value="style08" ${l.patternStyle==='style08'?'selected':''}>Вариант кружева 8</option>
+                    <option value="style09" ${l.patternStyle==='style09'?'selected':''}>Вариант кружева 9</option>
+                    <option value="style10" ${l.patternStyle==='style10'?'selected':''}>Вариант кружева 10</option>
+</select></div>
                 <div class="control-group"><label>Толщина нитей: <span id="val-strokeWidth">${l.strokeWidth || 1.5}</span></label><input type="range" value="${l.strokeWidth || 1.5}" min="0.5" max="10" step="0.1" oninput="upd('strokeWidth',this.value)" onchange="pushHistory()"></div>
                 <div class="control-group"><label>Сложность узора: <span id="val-complexity">${l.complexity}</span></label><input type="range" value="${l.complexity}" min="4" max="32" oninput="upd('complexity',this.value)" onchange="pushHistory()"></div>
                 <div class="control-group"><label>Прозрачность: <span id="val-opacity">${l.opacity}</span></label><input type="range" value="${l.opacity}" min="0.1" max="1" step="0.1" oninput="upd('opacity',this.value)" onchange="pushHistory()"></div>`;
@@ -894,5 +1067,23 @@
         syncUI(); 
         render();
     </script>
+
+<script>
+window.getLaceImageUrl = function(patternStyle) {
+    const map = {
+        'style1': 'для вайбкода-07.png',
+        'style2': 'для вайбкода-08.png',
+        'style3': 'для вайбкода-09.png',
+        'style4': 'для вайбкода-10.png',
+        'style5': 'для вайбкода-11.png',
+        'style6': 'для вайбкода-12.png',
+        'style7': 'для вайбкода-13.png',
+        'style8': 'для вайбкода-14.png',
+        'style9': 'для вайбкода-15.png',
+        'style10': 'для вайбкода-16.png'
+    };
+    return map[patternStyle] || 'для вайбкода-07.jpg';
+};
+</script>
 </body>
 </html>
