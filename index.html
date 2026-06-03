@@ -1069,21 +1069,50 @@
     </script>
 
 <script>
+/*
 window.getLaceImageUrl = function(patternStyle) {
     const map = {
-        'style1': 'для вайбкода-07.png',
-        'style2': 'для вайбкода-08.png',
-        'style3': 'для вайбкода-09.png',
-        'style4': 'для вайбкода-10.png',
-        'style5': 'для вайбкода-11.png',
-        'style6': 'для вайбкода-12.png',
-        'style7': 'для вайбкода-13.png',
-        'style8': 'для вайбкода-14.png',
-        'style9': 'для вайбкода-15.png',
-        'style10': 'для вайбкода-16.png'
+        'style01': 'для вайбкода-07.jpg',
+        'style02': 'для вайбкода-08.jpg',
+        'style03': 'для вайбкода-09.jpg',
+        'style04': 'для вайбкода-10.jpg',
+        'style05': 'для вайбкода-11.jpg',
+        'style06': 'для вайбкода-12.jpg',
+        'style07': 'для вайбкода-13.jpg',
+        'style08': 'для вайбкода-14.jpg',
+        'style09': 'для вайбкода-15.jpg',
+        'style10': 'для вайбкода-16.jpg'
     };
     return map[patternStyle] || 'для вайбкода-07.jpg';
 };
+*/
 </script>
 </body>
-</html>
+</html><script>
+window.getLaceSvgUrl = function(patternStyle) {
+    const map = {
+        'style01': 'СВЯЗАНАЯ ФИЗИКА?-07.svg',
+        'style02': 'СВЯЗАНАЯ ФИЗИКА?-08.svg',
+        'style03': 'СВЯЗАНАЯ ФИЗИКА?-09.svg',
+        'style04': 'СВЯЗАНАЯ ФИЗИКА?-10.svg',
+        'style05': 'СВЯЗАНАЯ ФИЗИКА?-11.svg',
+        'style06': 'СВЯЗАНАЯ ФИЗИКА?-12.svg',
+        'style07': 'СВЯЗАНАЯ ФИЗИКА?-13.svg',
+        'style08': 'СВЯЗАНАЯ ФИЗИКА?-14.svg',
+        'style09': 'СВЯЗАНАЯ ФИЗИКА?-15.svg',
+        'style10': 'СВЯЗАНАЯ ФИЗИКА?-16.svg'
+    };
+    return map[patternStyle] || 'СВЯЗАНАЯ ФИЗИКА?-07.svg';
+};
+
+window.generateLaceSVG = function(layer) {
+    const size = layer.size;
+    const svgUrl = window.getLaceSvgUrl(layer.patternStyle);
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">
+                <foreignObject width="${size}" height="${size}">
+                    <object data="${svgUrl}" type="image/svg+xml" width="${size}" height="${size}">
+                    </object>
+                </foreignObject>
+            </svg>`;
+}
+</script>
