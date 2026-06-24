@@ -1069,7 +1069,6 @@
     </script>
 
 <script>
-/*
 window.getLaceImageUrl = function(patternStyle) {
     const map = {
         'style01': 'для вайбкода-07.jpg',
@@ -1085,34 +1084,6 @@ window.getLaceImageUrl = function(patternStyle) {
     };
     return map[patternStyle] || 'для вайбкода-07.jpg';
 };
-*/
 </script>
 </body>
-</html><script>
-window.getLaceSvgUrl = function(patternStyle) {
-    const map = {
-        'style01': 'СВЯЗАНАЯ ФИЗИКА?-07.svg',
-        'style02': 'СВЯЗАНАЯ ФИЗИКА?-08.svg',
-        'style03': 'СВЯЗАНАЯ ФИЗИКА?-09.svg',
-        'style04': 'СВЯЗАНАЯ ФИЗИКА?-10.svg',
-        'style05': 'СВЯЗАНАЯ ФИЗИКА?-11.svg',
-        'style06': 'СВЯЗАНАЯ ФИЗИКА?-12.svg',
-        'style07': 'СВЯЗАНАЯ ФИЗИКА?-13.svg',
-        'style08': 'СВЯЗАНАЯ ФИЗИКА?-14.svg',
-        'style09': 'СВЯЗАНАЯ ФИЗИКА?-15.svg',
-        'style10': 'СВЯЗАНАЯ ФИЗИКА?-16.svg'
-    };
-    return map[patternStyle] || 'СВЯЗАНАЯ ФИЗИКА?-07.svg';
-};
-
-window.generateLaceSVG = function(layer) {
-    const size = layer.size;
-    const svgUrl = window.getLaceSvgUrl(layer.patternStyle);
-    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="opacity: ${layer.opacity}">
-                <foreignObject width="${size}" height="${size}">
-                    <object data="${svgUrl}" type="image/svg+xml" width="${size}" height="${size}">
-                    </object>
-                </foreignObject>
-            </svg>`;
-}
-</script>
+</html>
